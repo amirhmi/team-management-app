@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
 
 class Member(models.Model):
