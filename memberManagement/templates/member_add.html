@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Member</title>
+</head>
+<body>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+<form action="{% url 'member_delete' kwargs.team_name kwargs.user_id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+</form>
+</body>
+</html>
