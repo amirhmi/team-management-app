@@ -19,8 +19,8 @@ class Membership(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     class Role(models.TextChoices):
-        ADMIN = 'AD', _('Admin')
-        REGULAR = 'RE', _('Regular')
+        ADMIN = 'AD', _('Admin - Can delete members')
+        REGULAR = 'RE', _('Regular - Can\'t delete members')
 
     role = models.CharField(
         max_length=2,

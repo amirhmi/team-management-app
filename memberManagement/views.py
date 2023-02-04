@@ -51,12 +51,13 @@ class MemberUpdateView(UpdateView):
 
     def get(self, request, *args, **kwargs):
         team = Team.objects.get(name=self.kwargs['team_name'])
-        user = User.objects.get(pk=self.kwargs['user_id'])
-        membership = Membership.objects.get(user=user, team=team)
+        user_profile = UserProfile.objects.get(pk=self.kwargs['user_id'])
+        membership = Membership.objects.get(user_profile=user_profile, team=team)
+        user = user_profile.user
 
         form = MemberForm(initial={'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email,
-                                   'phone_number': user.profile.phone_number, 'role': membership.role})
-        context = {'form': form, "kwargs":kwargs}
+                                   'phone_number': user_profile.phone_number, 'role': membership.role})
+        context = {'form': form, "kwargs": kwargs}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):

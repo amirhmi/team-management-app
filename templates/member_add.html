@@ -1,19 +1,55 @@
+{% load widget_tweaks %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "stylesheet.css" %}"/>
+
     <title>Add Member</title>
 </head>
 <body>
+<div class="container-fluid container-padding">
+    <h3 class="dark-color">Add a team member</h3>
+    <h6 class="grey-color">Set email, location and Role.</h6>
+    <hr/>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <h5 class="dark-color">Info</h5>
+            {% for field in form %}
+                {% if field.name != "role" %}
+                    {% render_field field class+="form-control form-field" placeholder=field.label %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            <h5 class="dark-color">Role</h5>
+            {% for choice in form.role.field.choices %}
+                <div>
+                    <label for="">{{ choice.1 }}</label>
+                    <input class="float-right" type="radio" name="role" value="{{ choice.0 }}"
+                           {% if form.role.value == choice.0 %}checked="checked"{% endif %}/>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+        <input type="submit" class="btn btn-primary btn-lg float-right" value="Save">
+    </form>
+</div>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-</form>
-<form action="{% url 'member_delete' kwargs.team_name kwargs.user_id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Delete">
-</form>
+{#<form action="" method="post">#}
+{#    {% csrf_token %}#}
+{#    {{ form }}#}
+{#    <input type="submit" value="Submit">#}
+{#</form>#}
+{#<form action="{% url 'member_delete' kwargs.team_name kwargs.user_id %}" method="post">#}
+{#    {% csrf_token %}#}
+{#    <input type="submit" value="Delete">#}
+{#</form>#}
 </body>
 </html>
