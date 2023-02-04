@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DeleteView
 
 from memberManagement.forms import MemberForm
-from memberManagement.models import Team, Profile, Membership
+from memberManagement.models import Team, UserProfile, Membership
 
 
 class IndexView(ListView):
@@ -35,8 +35,8 @@ class MemberCreateView(CreateView):
         user = User(first_name=form.cleaned_data["first_name"], last_name=form.cleaned_data["last_name"],
                     email=form.cleaned_data["email"], username=form.cleaned_data["email"])
         # check phone number and email uniqueness
-        user_profile = Profile(user=user, phone_number=form.cleaned_data["phone_number"])
-        membership = Membership(team=team, user=user, role=form.cleaned_data["role"])
+        user_profile = UserProfile(user=user, phone_number=form.cleaned_data["phone_number"])
+        membership = Membership(team=team, user_profile=user_profile, role=form.cleaned_data["role"])
 
         user.save()
         user_profile.save()
@@ -73,7 +73,7 @@ class MemberUpdateView(UpdateView):
         membership.update(role=form.cleaned_data["role"])
         user.update(first_name=form.cleaned_data["first_name"], last_name=form.cleaned_data["last_name"],
                     email=form.cleaned_data["email"])
-        user[0].profile.phone_number = form.cleaned_data["phone_number"]
+        user[0].user_profile.phone_number = form.cleaned_data["phone_number"]
         return HttpResponse(200)
 
 
