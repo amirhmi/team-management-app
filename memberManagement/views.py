@@ -32,7 +32,7 @@ class MemberCreateView(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         form = MemberForm(request.POST)
         if not form.is_valid():
-            context = {'form': form, 'is_add':True, 'error_message': form.errors}
+            context = {'form': form, 'is_add': True, 'error_message': form.errors, 'kwargs': kwargs}
             return render(request, self.template_name, context)
 
         team = get_object_or_404(Team, name=self.kwargs['team_name'])
@@ -65,7 +65,7 @@ class MemberUpdateView(LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         form = MemberForm(request.POST)
         if not form.is_valid():
-            context = {'form': form, 'error_message': form.errors}
+            context = {'form': form, 'error_message': form.errors, 'kwargs': kwargs}
             return render(request, self.template_name, context)
 
         team = get_object_or_404(Team, name=self.kwargs['team_name'])

@@ -12,7 +12,7 @@ members = [
     {"first_name": "Susan",
      "last_name": "Conor",
      "email": "Susan@outlook.com",
-     "phone_number": "+17288298567",
+     "phone_number": "+12125552368",
      "role": "RE"},
 
     {"first_name": "Margo",
@@ -37,10 +37,10 @@ members = [
 team = Team.objects.create(name="course-team")
 team.save()
 for member in members:
-    user = User.objects.create(username=member["email"], email=member["email"], first_name=member["first_name"],
-                               last_name=member["last_name"])
+    user = User.objects.create_user(username=member["email"], email=member["email"], first_name=member["first_name"],
+                               last_name=member["last_name"], password="1234")
     user_profile = UserProfile.objects.create(user=user, phone_number=member["phone_number"])
-    membership = Membership.objects.create(team=team, user_profile=user_profile)
+    membership = Membership.objects.create(team=team, user_profile=user_profile, role=member["role"])
 
     user.save()
     user_profile.save()

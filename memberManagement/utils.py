@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 from memberManagement.models import Membership, UserProfile, Team
 
@@ -37,7 +38,7 @@ def is_team_admin():
                                        role=Membership.Role.ADMIN)
                 return function(request, *args, **kwargs)
 
-            except Membership.DoesNotExist():
+            except Membership.DoesNotExist:
                 return HttpResponse(403)
 
         return wrapper
