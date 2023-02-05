@@ -19,10 +19,10 @@ class IndexView(ListView):
 
 class MemberCreateView(CreateView):
     http_method_names = ['get', 'post']
-    template_name = 'member_add.html'
+    template_name = 'member_page.html'
 
     def get(self, request, *args, **kwargs):
-        context = {'form': MemberForm}
+        context = {'form': MemberForm, 'is_add': True}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -47,7 +47,7 @@ class MemberCreateView(CreateView):
 
 class MemberUpdateView(UpdateView):
     http_method_names = ['get', 'post']
-    template_name = 'member_add.html'
+    template_name = 'member_page.html'
 
     def get(self, request, *args, **kwargs):
         team = Team.objects.get(name=self.kwargs['team_name'])
@@ -57,7 +57,7 @@ class MemberUpdateView(UpdateView):
 
         form = MemberForm(initial={'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email,
                                    'phone_number': user_profile.phone_number, 'role': membership.role})
-        context = {'form': form, "kwargs": kwargs}
+        context = {'form': form, "kwargs": kwargs, 'is_add': False}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):

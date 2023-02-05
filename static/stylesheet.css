@@ -1,9 +1,9 @@
 .grey-color {
-    color: #A2A2A2;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .dark-color {
-    color: #696868;
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .border-bottom {
@@ -20,4 +20,16 @@
 
 .float-right {
     float: right;
+}
+
+.title-header {
+    margin-bottom: 20px;
+}
+
+.button {
+    width: 100px;
+}
+
+.delete-button {
+    border-color: rgba(0, 0, 0, 0.2);
 }
