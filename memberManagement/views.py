@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -9,7 +10,7 @@ from memberManagement.models import Team, UserProfile, Membership
 from memberManagement.utils import is_admin_role, get_or_create_membership_data, is_team_admin
 
 
-class IndexView(ListView):
+class IndexView(LoginRequiredMixin, ListView):
     template_name = "member_list.html"
     context_object_name = "members"
 
@@ -20,7 +21,7 @@ class IndexView(ListView):
         return render(request, self.template_name, context)
 
 
-class MemberCreateView(CreateView):
+class MemberCreateView(LoginRequiredMixin, CreateView):
     http_method_names = ['get', 'post']
     template_name = 'member_page.html'
 
@@ -44,7 +45,7 @@ class MemberCreateView(CreateView):
         return redirect(reverse('member_list', kwargs={"team_name": team.name}))
 
 
-class MemberUpdateView(UpdateView):
+class MemberUpdateView(LoginRequiredMixin, UpdateView):
     http_method_names = ['get', 'post']
     template_name = 'member_page.html'
 
@@ -79,7 +80,7 @@ class MemberUpdateView(UpdateView):
         return redirect(reverse('member_list', kwargs={"team_name": team.name}))
 
 
-class MemberDeleteView(DeleteView):
+class MemberDeleteView(LoginRequiredMixin, DeleteView):
     http_method_names = ['post']
 
     @method_decorator(is_team_admin())
