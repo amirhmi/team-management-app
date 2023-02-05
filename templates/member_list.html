@@ -11,12 +11,23 @@
 </head>
 <body>
 <div class="container-fluid container-padding">
-    <h3 class="dark-color">Team members</h3>
-    <h6 class="grey-color">You have {{ members|length }} team members.</h6>
+    {% if is_admin %}
+        <div class="row dir-rtl margin-bottom-neg">
+            <a class="add-link" href="{% url 'member_add' team_name=kwargs.team_name %}">+</a>
+        </div>
+    {% endif %}
+    <div>
+        <h3 class="dark-color">Team members</h3>
+        <h6 class="grey-color">You have {{ members|length }} team members.</h6>
+    </div>
 
     <ul class="list-group list-group-flush">
         {% for member in members %}
             <li class="list-group-item border-bottom">
+                {% if is_admin %}
+                    <a class="member-link"
+                       href="{% url 'member_edit' team_name=kwargs.team_name user_id=member.user_profile.pk %}">
+                {% endif %}
                 <div class="row">
                     <div class="col-md-1">
                         <img class="rounded-circle shadow-4-strong img-fluid"
@@ -35,7 +46,9 @@
                         <p class="mb-1 grey-color">{{ member.user_profile.user.email }}</p>
                     </div>
                 </div>
-
+                {% if is_admin %}
+                    </a>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

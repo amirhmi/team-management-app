@@ -10,12 +10,14 @@ from memberManagement.models import Team, UserProfile, Membership
 
 
 class IndexView(ListView):
-    template_name = "index.html"
+    template_name = "member_list.html"
     context_object_name = "members"
 
-    def get_queryset(self):
-        return Team.objects.get(name=self.kwargs['team_name']).membership_set.all()
-
+    def get(self, request, *args, **kwargs):
+        team = Team.objects.get(name=self.kwargs['team_name'])
+        context = {'members': team.membership_set.all(), 'is_admin': team.membership_set.get(
+            user_profile__user__email=request.user.email).role == Membership.Role.ADMIN, "kwargs": kwargs}
+        return render(request, self.template_name, context)
 
 class MemberCreateView(CreateView):
     http_method_names = ['get', 'post']
