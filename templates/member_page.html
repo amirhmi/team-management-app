@@ -35,7 +35,7 @@
         {% endif %}
     </h6>
     <hr/>
-    <form action="" method="post">
+    <form action="." method="post">
         {% csrf_token %}
         <div class="form-group">
             <h5 class="dark-color title-header">Info</h5>
@@ -57,12 +57,14 @@
             {% endfor %}
         </div>
         <div>
-            <input type="submit" class="button btn btn-primary btn-lg float-right" value="Save">
-            {% if not is_add %}
-            <form action="{% url 'member_delete' kwargs.team_name kwargs.user_id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" class="button btn btn-lg btn-outline-danger delete-button" value="Delete">
-            </form>
+            {% if is_add %}
+                <input type="submit" name="add"
+                       class="button btn btn-primary btn-lg float-right" value="Save">
+            {% else %}
+                <input type="submit" name="update"
+                       class="button btn btn-primary btn-lg float-right" value="Save">
+{#                <input type="submit" name="delete" formaction="{% url 'member_delete' kwargs.team_name kwargs.user_id %}"#}
+{#                       class="button btn btn-lg btn-outline-danger delete-button" value="Delete">#}
             {% endif %}
         </div>
     </form>

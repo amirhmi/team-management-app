@@ -1,12 +1,20 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.utils.decorators import method_decorator
-from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from memberManagement.forms import MemberForm
 from memberManagement.models import Team, UserProfile, Membership
+
+
+def is_admin_role(team, user):
+    try:
+        membership = team.membership_set.get(
+            user_profile__user__email=user.email)
+    except Membership.DoesNotExist:
+        return False
+    return membership.role == Membership.Role.ADMIN
 
 
 class IndexView(ListView):
@@ -15,9 +23,10 @@ class IndexView(ListView):
 
     def get(self, request, *args, **kwargs):
         team = Team.objects.get(name=self.kwargs['team_name'])
-        context = {'members': team.membership_set.all(), 'is_admin': team.membership_set.get(
-            user_profile__user__email=request.user.email).role == Membership.Role.ADMIN, "kwargs": kwargs}
+        context = {'members': team.membership_set.all(),
+                   'is_admin': is_admin_role(team, request.user), "kwargs": kwargs}
         return render(request, self.template_name, context)
+
 
 class MemberCreateView(CreateView):
     http_method_names = ['get', 'post']
@@ -29,7 +38,9 @@ class MemberCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         form = MemberForm(request.POST)
+        print(form)
         if not form.is_valid():
+            print(form.errors)
             context = {'form': form}
             return render(request, self.template_name, context)
 
@@ -69,14 +80,14 @@ class MemberUpdateView(UpdateView):
             return render(request, self.template_name, context)
 
         team = Team.objects.get(name=self.kwargs['team_name'])
-        user = User.objects.filter(pk=self.kwargs['user_id'])
-        membership = Membership.objects.filter(user=user[0], team=team)
+        user_profile = UserProfile.objects.filter(pk=self.kwargs['user_id'])
+        membership = Membership.objects.filter(user=user_profile[0], team=team)
 
-        user.update()
+        user_profile.update()
         membership.update(role=form.cleaned_data["role"])
-        user.update(first_name=form.cleaned_data["first_name"], last_name=form.cleaned_data["last_name"],
-                    email=form.cleaned_data["email"])
-        user[0].user_profile.phone_number = form.cleaned_data["phone_number"]
+        user_profile.update(first_name=form.cleaned_data["first_name"], last_name=form.cleaned_data["last_name"],
+                            email=form.cleaned_data["email"])
+        user_profile[0].user_profile.phone_number = form.cleaned_data["phone_number"]
         return HttpResponse(200)
 
 
@@ -85,7 +96,8 @@ class MemberDeleteView(DeleteView):
 
     def post(self, request, *args, **kwargs):
         team = Team.objects.get(name=self.kwargs['team_name'])
-        user = User.objects.filter(pk=self.kwargs['user_id'])
-        membership = Membership.objects.filter(user=user[0], team=team)
+        user_profile = UserProfile.objects.filter(pk=self.kwargs['user_id'])
+        membership = Membership.objects.filter(user_profile=user_profile[0], team=team)
 
         membership.delete()
+        return redirect(reverse('member_list', kwargs={"team_name": team.name}))

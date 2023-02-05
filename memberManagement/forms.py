@@ -10,4 +10,4 @@ class MemberForm(forms.Form):
     email = forms.EmailField()
     phone_number = PhoneNumberField()
     # role = forms.CharField(max_length=2, widget=forms.Select(choices=Membership.Role))
-    role = forms.MultipleChoiceField(widget=forms.RadioSelect, choices=Membership.Role.choices, label='role')
+    role = forms.ChoiceField(widget=forms.RadioSelect, choices=Membership.Role.choices, label='role')
