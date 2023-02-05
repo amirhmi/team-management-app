@@ -20,6 +20,11 @@
 </head>
 <body>
 <div class="container-fluid container-padding">
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
     <h3 class="dark-color">
         {% if is_add %}
             Add a team member
