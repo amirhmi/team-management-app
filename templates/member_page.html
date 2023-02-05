@@ -68,8 +68,8 @@
             {% else %}
                 <input type="submit" name="update"
                        class="button btn btn-primary btn-lg float-right" value="Save">
-{#                <input type="submit" name="delete" formaction="{% url 'member_delete' kwargs.team_name kwargs.user_id %}"#}
-{#                       class="button btn btn-lg btn-outline-danger delete-button" value="Delete">#}
+                <input type="submit" name="delete" formaction="{% url 'member_delete' kwargs.team_name kwargs.user_id %}"
+                       class="button btn btn-lg btn-outline-danger delete-button" value="Delete">
             {% endif %}
         </div>
     </form>

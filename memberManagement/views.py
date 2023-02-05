@@ -31,7 +31,7 @@ class MemberCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         form = MemberForm(request.POST)
         if not form.is_valid():
-            context = {'form': form, 'error_message': form.errors}
+            context = {'form': form, 'is_add':True, 'error_message': form.errors}
             return render(request, self.template_name, context)
 
         team = get_object_or_404(Team, name=self.kwargs['team_name'])
